@@ -92,7 +92,8 @@ jobs:
             docker pull $IMAGE
 
             echo "=== 4. Khoi chay lai container tren VPS ==="
-            docker stop app || true && docker rm app || true && docker run -d --name app -p 8080:8080 --restart unless-stopped $IMAGE
+            PORT="${{ secrets.APP_PORT || '8088' }}"
+            docker stop app || true && docker rm app || true && docker run -d --name app -p ${PORT}:8080 --restart unless-stopped $IMAGE
 
             echo "=== 5. Kiem tra container sau khi khoi chay ==="
             sleep 3
