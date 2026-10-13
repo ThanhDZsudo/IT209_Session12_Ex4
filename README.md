@@ -275,28 +275,40 @@ git push -u origin main
 Mở trình duyệt truy cập:
 - Kiểm tra sức khỏe ứng dụng:
   ```text
-  http://<VPS_IP>:8080/actuator/health
+  http://160.250.246.219:8088/actuator/health
   ```
-  **Kết quả mong đợi:** Mã HTTP **200 OK**, phản hồi JSON:
+  **Kết quả xác nhận thực tế:** Mã HTTP **200 OK**, phản hồi JSON:
   ```json
   {
-    "status": "UP"
+    "status": "UP",
+    "components": {
+      "db": {
+        "status": "UP",
+        "details": {
+          "database": "H2",
+          "validationQuery": "isValid()"
+        }
+      },
+      "diskSpace": {
+        "status": "UP",
+        "details": {
+          "total": 31608864768,
+          "free": 17974853632,
+          "threshold": 10485760,
+          "path": "/app/.",
+          "exists": true
+        }
+      },
+      "ping": {
+        "status": "UP"
+      }
+    }
   }
   ```
 
 - Kiểm tra API ứng dụng:
   ```text
-  http://<VPS_IP>:8080/
-  ```
-  **Kết quả:**
-  ```json
-  {
-    "status": "UP",
-    "application": "Spring Boot Student Management Service",
-    "deployment": "Automated deployment via GitHub Actions SSH Action on Remote VPS",
-    "actuator_health": "/actuator/health",
-    "api_endpoint": "/api/students"
-  }
+  http://160.250.246.219:8088/
   ```
 
 ---
@@ -307,8 +319,8 @@ Mở trình duyệt truy cập:
 homework/session_12/ex4/
 ├── .github/
 │   └── workflows/
-│       └── deploy-vps.yml       # Tệp workflow GitHub Actions chính
-├── Dockerfile                   # Dockerfile đóng gói ứng dụng container
-├── README.md                    # Báo cáo chi tiết và hướng dẫn cấu hình
-└── screenshot_ssh_deploy.png    # Ảnh chụp màn hình log kết quả SSH Deploy thành công
+│       └── deploy-vps.yml               # Tệp workflow GitHub Actions chính
+├── Dockerfile                           # Dockerfile đóng gói ứng dụng container
+├── README.md                            # Báo cáo chi tiết và hướng dẫn cấu hình
+└── screenshot_actuator_health.png       # Ảnh chụp màn hình HTTP 200 OK từ /actuator/health
 ```
