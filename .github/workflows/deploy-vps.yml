@@ -79,10 +79,9 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             echo "=== 1. Dang nhap GHCR tren VPS ==="
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin || true
 
             echo "=== 2. Chuan hoa ten image ==="
             ACTOR_LC=$(echo "${{ github.actor }}" | tr '[:upper:]' '[:lower:]')
@@ -93,7 +92,9 @@ jobs:
 
             echo "=== 4. Khoi chay lai container tren VPS ==="
             PORT="${{ secrets.APP_PORT || '8088' }}"
-            docker stop app || true && docker rm app || true && docker run -d --name app -p ${PORT}:8080 --restart unless-stopped $IMAGE
+            docker stop app || true
+            docker rm app || true
+            docker run -d --name app -p ${PORT}:8080 --restart unless-stopped $IMAGE
 
             echo "=== 5. Kiem tra container sau khi khoi chay ==="
             sleep 3
