@@ -1,0 +1,11 @@
+.git
+.gradle
+.idea
+build/classes
+build/generated
+build/reports
+build/test-results
+build/tmp
+!build/libs/*.jar
+*.md
+.github
